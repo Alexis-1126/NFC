@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Open LinkedIn</title>
+  <meta name="referrer" content="no-referrer">
+  <style>
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;}
+    .wrap{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+    .msg{font-size:16px;color:#333}
+  </style>
+  <script>
+    (function () {
+      // === EDIT THESE ===
+      var handle = "alexis-huynh-1514841b7"; // e.g. "alexis-huynh" (no leading slash)
+      var webUrl = "https://www.linkedin.com/in/alexis-huynh-1514841b7/"; // full profile URL
+      // ==================
+      
+      // Android intent URI (preferred on modern Android)
+      var encodedWeb = encodeURIComponent(webUrl);
+      var intentUri = "intent://in/" + handle + "#Intent;scheme=linkedin;package=com.linkedin.android;S.browser_fallback_url=" + encodedWeb + ";end";
+
+      // App URI (legacy)
+      var appUri = "linkedin://in/" + handle;
+
+      // Fallback delay (ms)
+      var fallbackDelay = 1000;
+
+      function openFallback() {
+        window.location.replace(webUrl);
+      }
+
+      // If Android, try intent first
+      var ua = navigator.userAgent || navigator.vendor || "";
+
+      if (/android/i.test(ua)) {
+        // Try intent URL (quick)
+        window.location = intentUri;
+        // fallback to web if nothing happens
+        setTimeout(openFallback, fallbackDelay);
+      } else {
+        // Try app URI (iOS / others)
+        window.location = appUri;
+        // then fallback to web after a short delay
+        setTimeout(openFallback, fallbackDelay);
+      }
+    })();
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="msg">Opening LinkedIn… If nothing happens, <a id="link" href="#">click here</a>.</div>
+  </div>
+  <script>
+    document.getElementById('link').href = document.location.href; // simple manual fallback
+  </script>
+</body>
+</html>
